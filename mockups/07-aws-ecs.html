@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS ECS Service - ArulKumar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f2f3f3;
+        }
+        .aws-header {
+            background: #232f3e;
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .aws-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
+        }
+        .aws-nav {
+            background: #37475a;
+            padding: 10px 30px;
+            color: white;
+            font-size: 14px;
+        }
+        .content {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .breadcrumb {
+            color: #16191f;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .page-header {
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 28px;
+            color: #16191f;
+            margin-bottom: 10px;
+        }
+        .status-badge {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: #1d8102;
+            color: white;
+            padding: 8px 16px;
+            border-radius: 4px;
+            font-size: 14px;
+            font-weight: 600;
+        }
+        .card {
+            background: white;
+            border: 1px solid #d5dbdb;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .card-title {
+            font-size: 18px;
+            color: #16191f;
+            margin-bottom: 20px;
+            font-weight: 600;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+        .stat-box {
+            background: white;
+            border: 1px solid #d5dbdb;
+            border-radius: 8px;
+            padding: 20px;
+            text-align: center;
+        }
+        .stat-number {
+            font-size: 36px;
+            color: #0073bb;
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+        .stat-label {
+            color: #687078;
+            font-size: 14px;
+        }
+        .info-row {
+            display: grid;
+            grid-template-columns: 250px 1fr;
+            padding: 12px 0;
+            border-bottom: 1px solid #f0f0f0;
+            font-size: 14px;
+        }
+        .info-label {
+            color: #687078;
+        }
+        .info-value {
+            color: #16191f;
+        }
+        .developer-highlight {
+            color: #0073bb;
+            font-weight: bold;
+        }
+        .tag-container {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 10px;
+        }
+        .tag {
+            background: #e7f3ff;
+            color: #0073bb;
+            padding: 6px 12px;
+            border-radius: 4px;
+            font-size: 13px;
+        }
+    </style>
+</head>
+<body>
+    <div class="aws-header">
+        <div class="aws-logo">
+            <svg width="30" height="30" viewBox="0 0 30 30">
+                <rect fill="#FF9900" width="30" height="30" rx="3"/>
+                <path fill="white" d="M8 18 L15 12 L22 18" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+            AWS Management Console
+        </div>
+        <div style="font-size: 14px;">
+            <span class="developer-highlight">ArulKumar</span> @ us-east-1
+        </div>
+    </div>
+
+    <div class="aws-nav">
+        Services > Containers > Elastic Container Service
+    </div>
+
+    <div class="content">
+        <div class="breadcrumb">
+            ECS > Clusters > arulkumar-devops-app-cluster > Services > arulkumar-devops-app-service
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">⚙️ arulkumar-devops-app-service</div>
+            <div style="margin-top: 10px;">
+                <span class="status-badge">✅ ACTIVE</span>
+            </div>
+        </div>
+
+        <div class="stats-grid">
+            <div class="stat-box">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Running tasks</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">0</div>
+                <div class="stat-label">Pending tasks</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">1</div>
+                <div class="stat-label">Desired tasks</div>
+            </div>
+            <div class="stat-box">
+                <div class="stat-number">12%</div>
+                <div class="stat-label">CPU utilization</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Service Configuration</div>
+            
+            <div class="info-row">
+                <div class="info-label">Service name:</div>
+                <div class="info-value">arulkumar-devops-app-service</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Cluster:</div>
+                <div class="info-value">arulkumar-devops-app-cluster</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Launch type:</div>
+                <div class="info-value">FARGATE</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Task definition:</div>
+                <div class="info-value">arulkumar-devops-app:15</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Platform version:</div>
+                <div class="info-value">LATEST</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Status:</div>
+                <div class="info-value" style="color: #1d8102; font-weight: bold;">✅ ACTIVE</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Created by:</div>
+                <div class="info-value developer-highlight">ArulKumar</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Created at:</div>
+                <div class="info-value">Feb 25, 2026 09:30:00 AM</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Load Balancer</div>
+            
+            <div class="info-row">
+                <div class="info-label">Type:</div>
+                <div class="info-value">Application Load Balancer</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Name:</div>
+                <div class="info-value">arulkumar-devops-app-alb</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Target group:</div>
+                <div class="info-value">arulkumar-devops-app-tg</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Health check:</div>
+                <div class="info-value" style="color: #1d8102; font-weight: bold;">✅ Healthy (1/1 targets)</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Health check path:</div>
+                <div class="info-value">/api/health</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Network Configuration</div>
+            
+            <div class="info-row">
+                <div class="info-label">VPC:</div>
+                <div class="info-value">vpc-0a1b2c3d4e5f (arulkumar-devops-app-vpc)</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Subnets:</div>
+                <div class="info-value">
+                    subnet-0a1b2c3d (us-east-1a)<br>
+                    subnet-4e5f6g7h (us-east-1b)
+                </div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Security groups:</div>
+                <div class="info-value">sg-0123456789 (arulkumar-devops-app-ecs-sg)</div>
+            </div>
+
+            <div class="info-row">
+                <div class="info-label">Public IP:</div>
+                <div class="info-value">✅ Enabled</div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-title">Tags</div>
+            <div class="tag-container">
+                <div class="tag">Developer: <strong>ArulKumar</strong></div>
+                <div class="tag">Application: arulkumar-devops-app</div>
+                <div class="tag">Assignment: DevOps</div>
+                <div class="tag">Environment: Production</div>
+            </div>
+        </div>
+
+        <div style="text-align: center; color: #687078; margin-top: 30px;">
+            <p>ECS Service created and managed by <span class="developer-highlight">ArulKumar</span></p>
+            <p style="margin-top: 5px; font-size: 14px;">DevOps Sharpened DAP Completion Assignment</p>
+        </div>
+    </div>
+</body>
+</html>

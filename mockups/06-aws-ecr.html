@@ -1,0 +1,232 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AWS ECR Repository - ArulKumar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Arial, sans-serif;
+            background: #f2f3f3;
+        }
+        .aws-header {
+            background: #232f3e;
+            color: white;
+            padding: 12px 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        .aws-logo {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            font-size: 18px;
+        }
+        .aws-nav {
+            background: #37475a;
+            padding: 10px 30px;
+            color: white;
+            font-size: 14px;
+        }
+        .content {
+            padding: 30px;
+            max-width: 1400px;
+            margin: 0 auto;
+        }
+        .breadcrumb {
+            color: #16191f;
+            font-size: 14px;
+            margin-bottom: 20px;
+        }
+        .page-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+        }
+        .page-title {
+            font-size: 28px;
+            color: #16191f;
+        }
+        .card {
+            background: white;
+            border: 1px solid #d5dbdb;
+            border-radius: 8px;
+            padding: 25px;
+            margin-bottom: 20px;
+        }
+        .card-section {
+            margin-bottom: 25px;
+        }
+        .section-title {
+            font-size: 18px;
+            color: #16191f;
+            margin-bottom: 15px;
+            font-weight: 600;
+        }
+        .info-grid {
+            display: grid;
+            grid-template-columns: 200px 1fr;
+            gap: 15px;
+            font-size: 14px;
+        }
+        .info-label {
+            color: #687078;
+        }
+        .info-value {
+            color: #16191f;
+            font-family: monospace;
+        }
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 14px;
+        }
+        .table th {
+            background: #fafafa;
+            padding: 12px;
+            text-align: left;
+            border-bottom: 2px solid #d5dbdb;
+            color: #16191f;
+            font-weight: 600;
+        }
+        .table td {
+            padding: 15px 12px;
+            border-bottom: 1px solid #e9ecef;
+        }
+        .badge-success {
+            background: #1d8102;
+            color: white;
+            padding: 4px 10px;
+            border-radius: 4px;
+            font-size: 12px;
+            font-weight: 600;
+        }
+        .tag {
+            display: inline-block;
+            background: #e7f3ff;
+            color: #0073bb;
+            padding: 4px 10px;
+            border-radius: 4px;
+            margin-right: 8px;
+            font-size: 12px;
+        }
+        .developer-highlight {
+            color: #0073bb;
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="aws-header">
+        <div class="aws-logo">
+            <svg width="30" height="30" viewBox="0 0 30 30">
+                <rect fill="#FF9900" width="30" height="30" rx="3"/>
+                <path fill="white" d="M8 18 L15 12 L22 18" stroke="white" stroke-width="2" fill="none"/>
+            </svg>
+            AWS Management Console
+        </div>
+        <div style="font-size: 14px;">
+            <span class="developer-highlight">ArulKumar</span> @ us-east-1
+        </div>
+    </div>
+
+    <div class="aws-nav">
+        Services > Containers > Elastic Container Registry
+    </div>
+
+    <div class="content">
+        <div class="breadcrumb">
+            ECR > Repositories > arulkumar-devops-app
+        </div>
+
+        <div class="page-header">
+            <div class="page-title">📦 arulkumar-devops-app</div>
+            <div style="color: #687078; font-size: 14px;">Private repository</div>
+        </div>
+
+        <div class="card">
+            <div class="card-section">
+                <div class="section-title">Repository Details</div>
+                <div class="info-grid">
+                    <div class="info-label">Repository name:</div>
+                    <div class="info-value">arulkumar-devops-app</div>
+
+                    <div class="info-label">URI:</div>
+                    <div class="info-value">123456789012.dkr.ecr.us-east-1.amazonaws.com/arulkumar-devops-app</div>
+
+                    <div class="info-label">Region:</div>
+                    <div class="info-value">us-east-1</div>
+
+                    <div class="info-label">Created:</div>
+                    <div class="info-value">Feb 25, 2026 09:00:00 AM</div>
+
+                    <div class="info-label">Scan on push:</div>
+                    <div class="info-value">✅ Enabled</div>
+
+                    <div class="info-label">Image count:</div>
+                    <div class="info-value">3</div>
+                </div>
+            </div>
+
+            <div class="card-section">
+                <div class="section-title">Tags</div>
+                <div>
+                    <span class="tag">Developer: <span class="developer-highlight">ArulKumar</span></span>
+                    <span class="tag">Application: arulkumar-devops-app</span>
+                    <span class="tag">Assignment: DevOps</span>
+                </div>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="section-title">Images (3)</div>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th>Image tag</th>
+                        <th>Pushed at</th>
+                        <th>Size</th>
+                        <th>Scan status</th>
+                        <th>Pushed by</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr>
+                        <td><strong>latest</strong></td>
+                        <td>Feb 25, 2026 10:30:00 AM</td>
+                        <td>156.3 MB</td>
+                        <td><span class="badge-success">✅ No issues</span></td>
+                        <td><span class="developer-highlight">ArulKumar</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>v1.0.0</strong></td>
+                        <td>Feb 25, 2026 09:15:00 AM</td>
+                        <td>156.3 MB</td>
+                        <td><span class="badge-success">✅ No issues</span></td>
+                        <td><span class="developer-highlight">ArulKumar</span></td>
+                    </tr>
+                    <tr>
+                        <td><strong>build-15</strong></td>
+                        <td>Feb 25, 2026 08:00:00 AM</td>
+                        <td>156.3 MB</td>
+                        <td><span class="badge-success">✅ No issues</span></td>
+                        <td><span class="developer-highlight">ArulKumar</span></td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+
+        <div style="text-align: center; color: #687078; margin-top: 30px;">
+            <p>Repository created and managed by <span class="developer-highlight">ArulKumar</span></p>
+            <p style="margin-top: 5px; font-size: 14px;">DevOps Sharpened DAP Completion Assignment</p>
+        </div>
+    </div>
+</body>
+</html>

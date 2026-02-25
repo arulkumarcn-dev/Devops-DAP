@@ -1,0 +1,15 @@
+# Docker ignore file for ArulKumar DevOps Assignment
+target/
+!target/arulkumar-devops-app.jar
+.git
+.gitignore
+*.md
+.mvn
+mvnw
+mvnw.cmd
+.idea
+*.iml
+.vscode
+*.log
+.DS_Store
+Thumbs.db

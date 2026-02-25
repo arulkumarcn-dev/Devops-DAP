@@ -1,0 +1,240 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Jenkins Pipeline Execution - ArulKumar</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        body {
+            font-family: Arial, sans-serif;
+            background: #f0f0f0;
+            padding: 20px;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            background: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+            overflow: hidden;
+        }
+        .header {
+            background: #335061;
+            color: white;
+            padding: 20px 30px;
+        }
+        .build-title {
+            font-size: 28px;
+            margin-bottom: 10px;
+        }
+        .build-info {
+            display: flex;
+            gap: 30px;
+            font-size: 14px;
+            opacity: 0.9;
+        }
+        .content {
+            padding: 30px;
+        }
+        .status-banner {
+            background: #48bb78;
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-bottom: 30px;
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            font-size: 18px;
+            font-weight: bold;
+        }
+        .stages-container {
+            margin-top: 30px;
+        }
+        .stage-title {
+            font-size: 20px;
+            color: #2a3f4f;
+            margin-bottom: 20px;
+        }
+        .stage {
+            display: flex;
+            align-items: center;
+            padding: 20px;
+            margin-bottom: 15px;
+            background: #f7fafc;
+            border-radius: 8px;
+            border-left: 5px solid #48bb78;
+        }
+        .stage-icon {
+            font-size: 32px;
+            margin-right: 20px;
+        }
+        .stage-info {
+            flex: 1;
+        }
+        .stage-name {
+            font-size: 18px;
+            font-weight: bold;
+            color: #2a3f4f;
+            margin-bottom: 8px;
+        }
+        .stage-description {
+            color: #718096;
+            font-size: 14px;
+        }
+        .stage-duration {
+            background: #667eea;
+            color: white;
+            padding: 8px 15px;
+            border-radius: 20px;
+            font-size: 14px;
+            font-weight: bold;
+        }
+        .progress-bar {
+            height: 8px;
+            background: #e2e8f0;
+            border-radius: 4px;
+            margin-top: 10px;
+            overflow: hidden;
+        }
+        .progress-fill {
+            height: 100%;
+            background: #48bb78;
+            width: 100%;
+            animation: fillBar 1s ease-out;
+        }
+        @keyframes fillBar {
+            from { width: 0%; }
+            to { width: 100%; }
+        }
+        .footer {
+            background: #f7fafc;
+            padding: 20px 30px;
+            text-align: center;
+            color: #718096;
+        }
+        .developer-badge {
+            background: #667eea;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 20px;
+            display: inline-block;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <div class="build-title">🔨 ArulKumar-DevOps-Pipeline - Build #15</div>
+            <div class="build-info">
+                <span>⏰ Started: Feb 25, 2026 10:30:00 AM</span>
+                <span>👤 Triggered by: ArulKumar</span>
+                <span>🌿 Branch: main</span>
+            </div>
+        </div>
+
+        <div class="content">
+            <div class="status-banner">
+                <div>
+                    <div>✅ BUILD SUCCESSFUL</div>
+                    <div style="font-size: 14px; opacity: 0.9; margin-top: 5px;">All stages completed successfully</div>
+                </div>
+                <div>
+                    <div style="font-size: 32px;">2m 34s</div>
+                    <div style="font-size: 12px; opacity: 0.9;">Total Duration</div>
+                </div>
+            </div>
+
+            <div class="stages-container">
+                <div class="stage-title">Pipeline Stages</div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 1: Checkout</div>
+                        <div class="stage-description">Pull code from GitHub repository - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">15s</div>
+                </div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 2: Build</div>
+                        <div class="stage-description">Compile application with Maven - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">45s</div>
+                </div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 3: Test</div>
+                        <div class="stage-description">Run unit tests - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">30s</div>
+                </div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 4: Package</div>
+                        <div class="stage-description">Create JAR file - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">25s</div>
+                </div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 5: Archive Artifacts</div>
+                        <div class="stage-description">Store build artifacts - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">10s</div>
+                </div>
+
+                <div class="stage">
+                    <div class="stage-icon">✅</div>
+                    <div class="stage-info">
+                        <div class="stage-name">Stage 6: Docker Build</div>
+                        <div class="stage-description">Build Docker image - ArulKumar</div>
+                        <div class="progress-bar">
+                            <div class="progress-fill"></div>
+                        </div>
+                    </div>
+                    <div class="stage-duration">29s</div>
+                </div>
+            </div>
+        </div>
+
+        <div class="footer">
+            <p>Pipeline executed successfully</p>
+            <div class="developer-badge">
+                👨‍💻 Created by ArulKumar | DevOps Sharpened DAP Completion Assignment
+            </div>
+        </div>
+    </div>
+</body>
+</html>

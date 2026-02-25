@@ -1,0 +1,26 @@
+# ArulKumar DevOps Assignment - Docker Compose
+version: '3.8'
+
+services:
+  arulkumar-devops-app:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    image: arulkumar-devops-app:latest
+    container_name: arulkumar-devops-container
+    ports:
+      - "8080:8080"
+    environment:
+      - SPRING_PROFILES_ACTIVE=prod
+      - DEVELOPER_NAME=ArulKumar
+    healthcheck:
+      test: ["CMD", "wget", "--no-verbose", "--tries=1", "--spider", "http://localhost:8080/api/health"]
+      interval: 30s
+      timeout: 3s
+      retries: 3
+      start_period: 40s
+    restart: unless-stopped
+    labels:
+      - "com.arulkumar.description=DevOps Assignment Application"
+      - "com.arulkumar.author=ArulKumar"
+      - "com.arulkumar.version=1.0.0"

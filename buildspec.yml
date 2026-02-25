@@ -1,0 +1,68 @@
+# ArulKumar DevOps Assignment - AWS CodeBuild BuildSpec
+# This file defines the build process for AWS CodePipeline
+
+version: 0.2
+
+env:
+  variables:
+    DEVELOPER_NAME: "ArulKumar"
+    APP_NAME: "arulkumar-devops-app"
+    JAVA_HOME: "/usr/lib/jvm/java-17-amazon-corretto"
+  parameter-store:
+    DOCKER_USERNAME: /arulkumar/docker/username
+    DOCKER_PASSWORD: /arulkumar/docker/password
+
+phases:
+  pre_build:
+    commands:
+      - echo "========================================="
+      - echo "Pre-Build Phase - ArulKumar"
+      - echo "========================================="
+      - echo "Logging in to Amazon ECR..."
+      - aws --version
+      - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_NAME
+      - aws ecr get-login-password --region $AWS_DEFAULT_REGION | docker login --username AWS --password-stdin $REPOSITORY_URI
+      - COMMIT_HASH=$(echo $CODEBUILD_RESOLVED_SOURCE_VERSION | cut -c 1-7)
+      - IMAGE_TAG=${COMMIT_HASH:=latest}
+      - echo "Image tag is $IMAGE_TAG"
+      
+  build:
+    commands:
+      - echo "========================================="
+      - echo "Build Phase - ArulKumar"
+      - echo "========================================="
+      - echo "Building Maven project..."
+      - mvn clean package -DskipTests
+      - echo "Building Docker image..."
+      - docker build -t $APP_NAME:latest .
+      - docker tag $APP_NAME:latest $REPOSITORY_URI:latest
+      - docker tag $APP_NAME:latest $REPOSITORY_URI:$IMAGE_TAG
+      
+  post_build:
+    commands:
+      - echo "========================================="
+      - echo "Post-Build Phase - ArulKumar"
+      - echo "========================================="
+      - echo "Pushing Docker images to ECR..."
+      - docker push $REPOSITORY_URI:latest
+      - docker push $REPOSITORY_URI:$IMAGE_TAG
+      - echo "Writing image definitions file..."
+      - printf '[{"name":"arulkumar-devops-container","imageUri":"%s"}]' $REPOSITORY_URI:$IMAGE_TAG > imagedefinitions.json
+      - echo "Build completed by ArulKumar on `date`"
+
+artifacts:
+  files:
+    - imagedefinitions.json
+    - target/arulkumar-devops-app.jar
+  name: arulkumar-build-artifacts
+
+cache:
+  paths:
+    - '/root/.m2/**/*'
+    - 'target/**/*'
+
+reports:
+  junit-reports:
+    files:
+      - 'target/surefire-reports/*.xml'
+    file-format: 'JUNITXML'
