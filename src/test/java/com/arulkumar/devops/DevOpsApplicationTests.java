@@ -5,8 +5,10 @@ import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.test.context.ActiveProfiles;
 
 /**
- * Integration tests for ArulKumar DevOps Application
- * Author: ArulKumar
+ * Integration tests for arulkumar DevOps Application
+ * Author: arulkumar
+ * Developer: arulkumar
+ * Assignment: DevOps Sharpened DAP Completion
  */
 @SpringBootTest
 @ActiveProfiles("test")
@@ -16,13 +18,15 @@ class DevOpsApplicationTests {
     void contextLoads() {
         // Test that Spring context loads successfully
         // This verifies all beans are properly configured
-        // Created by: ArulKumar
+        // Created by: arulkumar
+        // Developer: arulkumar
     }
 
     @Test
     void applicationStarts() {
         // Test that the application starts without errors
         // Verifies main method execution
-        // Created by: ArulKumar
+        // Created by: arulkumar
+        // Developer: arulkumar
     }
 }

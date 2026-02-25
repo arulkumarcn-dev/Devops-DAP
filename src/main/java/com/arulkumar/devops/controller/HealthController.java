@@ -9,7 +9,9 @@ import java.util.Map;
 
 /**
  * Health Check Controller
- * Author: ArulKumar
+ * Author: arulkumar
+ * Developer: arulkumar
+ * Assignment: DevOps Sharpened DAP Completion
  */
 @RestController
 @RequestMapping("/api")
@@ -19,8 +21,9 @@ public class HealthController {
     public Map<String, Object> health() {
         Map<String, Object> response = new HashMap<>();
         response.put("status", "UP");
-        response.put("application", "ArulKumar DevOps Assignment");
-        response.put("author", "ArulKumar");
+        response.put("application", "arulkumar DevOps Assignment");
+        response.put("author", "arulkumar");
+        response.put("developer", "arulkumar");
         response.put("timestamp", LocalDateTime.now().toString());
         response.put("message", "Application is running successfully!");
         return response;
@@ -29,9 +32,10 @@ public class HealthController {
     @GetMapping("/welcome")
     public Map<String, Object> welcome() {
         Map<String, Object> response = new HashMap<>();
-        response.put("message", "Welcome to ArulKumar's DevOps Assignment!");
+        response.put("message", "Welcome to arulkumar's DevOps Assignment!");
         response.put("assignment", "DevOps Sharpened DAP Completion");
-        response.put("author", "ArulKumar");
+        response.put("author", "arulkumar");
+        response.put("developer", "arulkumar");
         response.put("features", new String[]{
             "Jenkins Pipeline Integration",
             "Docker Containerization",
@@ -45,8 +49,9 @@ public class HealthController {
     @GetMapping("/info")
     public Map<String, Object> info() {
         Map<String, Object> response = new HashMap<>();
-        response.put("projectName", "ArulKumar DevOps Assignment");
-        response.put("developer", "ArulKumar");
+        response.put("projectName", "arulkumar DevOps Assignment");
+        response.put("developer", "arulkumar");
+        response.put("createdBy", "arulkumar");
         response.put("version", "1.0.0");
         response.put("description", "SpringBoot application with complete CI/CD pipeline");
         response.put("technologies", new String[]{
