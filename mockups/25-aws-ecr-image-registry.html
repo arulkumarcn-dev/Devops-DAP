@@ -1,0 +1,538 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Amazon ECR — arulkumar-devops-app Images</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Amazon Ember', -apple-system, BlinkMacSystemFont, sans-serif; background:#f2f3f3; color:#16191f; font-size:14px; }
+  .aws-header { background:#232f3e; color:#fff; padding:0 20px; height:48px; display:flex; align-items:center; gap:12px; position:sticky; top:0; z-index:100; }
+  .aws-logo { font-size:20px; font-weight:900; color:#ff9900; letter-spacing:-1px; margin-right:8px; }
+  .aws-header nav a { color:#d5dbdb; font-size:13px; cursor:pointer; margin-right:16px; text-decoration:none; }
+  .aws-header nav a:hover { color:#fff; }
+  .aws-header .right { margin-left:auto; display:flex; align-items:center; gap:16px; }
+  .aws-header .region-btn { color:#d5dbdb; font-size:13px; border:1px solid #4a5568; border-radius:2px; padding:3px 10px; cursor:pointer; }
+  .aws-header .account-info { color:#ff9900; font-size:12px; }
+
+  .breadcrumb { background:#fff; border-bottom:1px solid #d5dbdb; padding:8px 24px; font-size:13px; display:flex; align-items:center; gap:4px; }
+  .breadcrumb a { color:#0073bb; text-decoration:none; }
+  .breadcrumb a:hover { text-decoration:underline; }
+  .breadcrumb .sep { color:#879596; margin:0 4px; }
+
+  .content { max-width:1280px; margin:0 auto; padding:24px 24px; }
+  .page-header { display:flex; align-items:flex-start; justify-content:space-between; margin-bottom:20px; }
+  .page-title-group h1 { font-size:22px; font-weight:700; color:#16191f; display:flex; align-items:center; gap:10px; }
+  .page-title-group .sub { color:#687078; font-size:13px; margin-top:4px; }
+
+  /* Repo info banner */
+  .repo-banner { background:#fff; border:1px solid #d5dbdb; border-radius:2px; padding:18px 24px; margin-bottom:20px; display:grid; grid-template-columns:repeat(5, 1fr); gap:0; }
+  .rb-item { padding:0 20px; border-right:1px solid #e9ebed; }
+  .rb-item:first-child { padding-left:0; }
+  .rb-item:last-child { border-right:none; }
+  .rb-label { font-size:12px; color:#687078; text-transform:uppercase; letter-spacing:.5px; margin-bottom:6px; }
+  .rb-value { font-size:15px; font-weight:700; color:#16191f; }
+  .rb-value.blue { color:#0073bb; }
+  .rb-value.mono { font-family:monospace; font-size:12px; }
+  .rb-sub { font-size:12px; color:#687078; margin-top:2px; }
+
+  /* URI box */
+  .uri-box { background:#fff; border:1px solid #d5dbdb; border-radius:2px; padding:12px 16px; margin-bottom:20px; display:flex; align-items:center; gap:12px; }
+  .uri-label { font-size:12px; color:#687078; font-weight:600; text-transform:uppercase; white-space:nowrap; }
+  .uri-value { font-family:monospace; font-size:13px; color:#0073bb; flex:1; }
+  .copy-btn { background:#fff; border:1px solid #0073bb; color:#0073bb; padding:4px 12px; font-size:12px; border-radius:2px; cursor:pointer; white-space:nowrap; }
+  .copy-btn:hover { background:#f0f8ff; }
+
+  /* Toolbar */
+  .toolbar { display:flex; align-items:center; gap:10px; margin-bottom:16px; }
+  .search-box { border:1px solid #879596; border-radius:2px; padding:6px 12px; font-size:13px; width:300px; outline:none; }
+  .search-box:focus { border-color:#0073bb; box-shadow:0 0 0 2px rgba(0,115,187,.2); }
+  .filter-btn { border:1px solid #879596; border-radius:2px; padding:6px 12px; font-size:13px; background:#fff; cursor:pointer; display:flex; align-items:center; gap:6px; }
+  .toolbar-spacer { flex:1; }
+  .action-btn { background:#0073bb; color:#fff; border:none; border-radius:2px; padding:7px 16px; font-size:13px; font-weight:600; cursor:pointer; }
+  .action-btn:hover { background:#005c99; }
+
+  /* Table */
+  .table-wrap { background:#fff; border:1px solid #d5dbdb; border-radius:2px; overflow:hidden; }
+  .table-header-bar { padding:12px 20px; border-bottom:1px solid #d5dbdb; display:flex; align-items:center; justify-content:space-between; }
+  .table-header-bar .title { font-weight:700; font-size:14px; }
+  .table-header-bar .count { background:#e9ebed; border-radius:10px; padding:2px 9px; font-size:12px; font-weight:600; color:#16191f; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  thead th { background:#fafafa; padding:10px 20px; text-align:left; border-bottom:1px solid #d5dbdb; color:#687078; font-weight:600; font-size:12px; text-transform:uppercase; letter-spacing:.4px; white-space:nowrap; }
+  thead th input[type=checkbox] { cursor:pointer; }
+  tbody td { padding:11px 20px; border-bottom:1px solid #e9ebed; vertical-align:middle; }
+  tbody tr:last-child td { border-bottom:none; }
+  tbody tr:hover td { background:#f8f9fa; }
+  tbody tr.latest-row td { background:#fffdf0; }
+  tbody tr.latest-row:hover td { background:#fff9e0; }
+  .mono { font-family:monospace; font-size:12px; }
+  .tag-chip { display:inline-flex; align-items:center; background:#e8f4fd; border:1px solid #7ec8e3; border-radius:3px; padding:2px 9px; font-size:12px; color:#0073bb; font-family:monospace; margin:2px; }
+  .tag-chip.latest-tag { background:#fff3cd; border-color:#f59e0b; color:#92400e; font-weight:700; }
+  .tag-chip.commit-tag { background:#e8f5e9; border-color:#66bb6a; color:#1b5e20; }
+  .no-tag { color:#879596; font-style:italic; font-size:12px; }
+  .size-cell { white-space:nowrap; }
+  .badge-active { background:#ebf8e8; border:1px solid #a0d7a0; border-radius:12px; padding:2px 10px; font-size:12px; font-weight:600; color:#1d8102; white-space:nowrap; display:inline-flex; align-items:center; gap:4px; }
+  .dot-green { width:7px; height:7px; border-radius:50%; background:#1d8102; flex-shrink:0; }
+  .pull-link { color:#0073bb; cursor:pointer; font-size:12px; }
+  .pull-link:hover { text-decoration:underline; }
+  .digest-short { font-family:monospace; font-size:12px; color:#16191f; }
+  .digest-full { font-family:monospace; font-size:11px; color:#687078; }
+  .tooltip { position:relative; cursor:help; }
+  .size-bar-wrap { display:flex; align-items:center; gap:8px; }
+  .size-bar { height:5px; background:#0073bb; border-radius:2px; opacity:.6; }
+
+  /* Actions col */
+  .row-actions { display:flex; gap:6px; }
+  .row-btn { background:#fff; border:1px solid #879596; border-radius:2px; padding:3px 9px; font-size:12px; cursor:pointer; color:#16191f; }
+  .row-btn:hover { border-color:#0073bb; color:#0073bb; background:#f0f8ff; }
+
+  .pagination { display:flex; align-items:center; justify-content:space-between; padding:12px 20px; border-top:1px solid #d5dbdb; background:#fafafa; font-size:13px; color:#687078; }
+  .pg-btns { display:flex; gap:6px; }
+  .pg-btn { background:#fff; border:1px solid #d5dbdb; border-radius:2px; padding:4px 10px; font-size:12px; cursor:pointer; }
+  .pg-btn:disabled { opacity:.5; cursor:default; }
+
+  .info-note { background:#e8f4fd; border:1px solid #7ec8e3; border-radius:2px; padding:10px 16px; margin-bottom:16px; font-size:13px; color:#0073bb; display:flex; align-items:center; gap:8px; }
+</style>
+</head>
+<body>
+
+<!-- AWS Header -->
+<div class="aws-header">
+  <div class="aws-logo">aws</div>
+  <nav>
+    <a>Services ▾</a>
+    <a>Container</a>
+    <a>ECR</a>
+  </nav>
+  <div class="right">
+    <span class="region-btn">🌎 US East (N. Virginia) ▾</span>
+    <span class="account-info">958175316186 ▾</span>
+    <span style="color:#d5dbdb;font-size:13px;">arulkumar ▾</span>
+  </div>
+</div>
+
+<!-- Breadcrumb -->
+<div class="breadcrumb">
+  <a href="#">Amazon ECR</a><span class="sep">›</span>
+  <a href="#">Repositories</a><span class="sep">›</span>
+  <a href="#">arulkumar-devops-app</a><span class="sep">›</span>
+  <span>Images</span>
+</div>
+
+<div class="content">
+
+  <!-- Page header -->
+  <div class="page-header">
+    <div class="page-title-group">
+      <h1>
+        <svg width="22" height="22" viewBox="0 0 40 40" fill="none"><rect width="40" height="40" rx="4" fill="#FF9900"/><path d="M20 6C12.27 6 6 12.27 6 20s6.27 14 14 14 14-6.27 14-14S27.73 6 20 6zm0 4a2 2 0 110 4 2 2 0 010-4zm0 6c1.1 0 2 .9 2 2v8a2 2 0 11-4 0v-8c0-1.1.9-2 2-2z" fill="white"/></svg>
+        arulkumar-devops-app
+      </h1>
+      <div class="sub">Private repository · us-east-1 · 12 images · ECR Registry: 958175316186.dkr.ecr.us-east-1.amazonaws.com</div>
+    </div>
+    <div style="display:flex;gap:8px;">
+      <button class="filter-btn">View push commands</button>
+      <button class="action-btn">Delete images</button>
+    </div>
+  </div>
+
+  <!-- Repo Info Banner -->
+  <div class="repo-banner">
+    <div class="rb-item">
+      <div class="rb-label">Repository name</div>
+      <div class="rb-value blue">arulkumar-devops-app</div>
+      <div class="rb-sub">Private</div>
+    </div>
+    <div class="rb-item">
+      <div class="rb-label">Images</div>
+      <div class="rb-value">12</div>
+      <div class="rb-sub">All active</div>
+    </div>
+    <div class="rb-item">
+      <div class="rb-label">Tagged images</div>
+      <div class="rb-value">6</div>
+      <div class="rb-sub">6 untagged</div>
+    </div>
+    <div class="rb-item">
+      <div class="rb-label">Created</div>
+      <div class="rb-value">03 Mar 2026</div>
+      <div class="rb-sub">09:07 UTC</div>
+    </div>
+    <div class="rb-item">
+      <div class="rb-label">Scan on push</div>
+      <div class="rb-value" style="color:#1d8102">Enabled</div>
+      <div class="rb-sub">Basic scanning</div>
+    </div>
+  </div>
+
+  <!-- URI Box -->
+  <div class="uri-box">
+    <span class="uri-label">Repository URI</span>
+    <span class="uri-value">958175316186.dkr.ecr.us-east-1.amazonaws.com/arulkumar-devops-app</span>
+    <button class="copy-btn">📋 Copy URI</button>
+  </div>
+
+  <!-- Info note -->
+  <div class="info-note">
+    ℹ️ Images are pushed automatically by <strong>AWS CodeBuild</strong> via <code>arulkumar-devops-app-pipeline</code> on every commit to <strong>main</strong> branch. Latest image tag matches the Git commit hash.
+  </div>
+
+  <!-- Toolbar -->
+  <div class="toolbar">
+    <input class="search-box" type="text" placeholder="🔍 Filter by tag or digest..." value="" />
+    <button class="filter-btn">⚙ Columns ▾</button>
+    <div class="toolbar-spacer"></div>
+    <button class="filter-btn">↻ Refresh</button>
+  </div>
+
+  <!-- Images Table -->
+  <div class="table-wrap">
+    <div class="table-header-bar">
+      <span class="title">Images <span class="count">12</span></span>
+      <span style="font-size:12px;color:#687078;">Sorted by: Push date (newest first)</span>
+    </div>
+    <table>
+      <thead>
+        <tr>
+          <th><input type="checkbox" /></th>
+          <th>Image tag</th>
+          <th>Image digest (SHA256)</th>
+          <th>Push date</th>
+          <th>Size</th>
+          <th>Status</th>
+          <th>Last pull</th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+
+        <!-- Image 1: latest + 6426c4e (newest) -->
+        <tr class="latest-row">
+          <td><input type="checkbox" /></td>
+          <td>
+            <span class="tag-chip latest-tag">latest</span>
+            <span class="tag-chip commit-tag">6426c4e</span>
+          </td>
+          <td>
+            <span class="digest-short">sha256:7dd424cc</span><br>
+            <span class="digest-full">7dd424ccc1a21b494340b5c3cb68bcdb3f718b35615e004206e6144cf9073f09</span>
+          </td>
+          <td>03 Mar 2026, 10:44 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 2: e087b6f -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="tag-chip commit-tag">e087b6f</span></td>
+          <td>
+            <span class="digest-short">sha256:da8377c4</span><br>
+            <span class="digest-full">da8377c41df7db0192e455140bdd1f1b78bad722115d6b02fdbc0dcbc55f6f62</span>
+          </td>
+          <td>03 Mar 2026, 10:33 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>03 Mar 2026, 10:34 UTC</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 3: f864b8d -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="tag-chip commit-tag">f864b8d</span></td>
+          <td>
+            <span class="digest-short">sha256:f467a3d3</span><br>
+            <span class="digest-full">f467a3d33638b8e8188d74103be506c926bc4be2b266e363d5360a10318c6f9c</span>
+          </td>
+          <td>03 Mar 2026, 10:22 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>03 Mar 2026, 10:23 UTC</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 4: 0bc72ea -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="tag-chip commit-tag">0bc72ea</span></td>
+          <td>
+            <span class="digest-short">sha256:1fc7d29c</span><br>
+            <span class="digest-full">1fc7d29cf460eb00f0b3617008ec983fb17c55bd0e6bf057cd5bc4450935d795</span>
+          </td>
+          <td>03 Mar 2026, 10:08 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>03 Mar 2026, 10:10 UTC</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 5: untagged sha256:2b423071 -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:2b423071</span><br>
+            <span class="digest-full">2b423071add9be1cd0084fdca303a018c9dcd64fe18af90ca039f697abb88146</span>
+          </td>
+          <td>03 Mar 2026, 09:56 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 6: untagged sha256:b12d5fc0 -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:b12d5fc0</span><br>
+            <span class="digest-full">b12d5fc0d6b9773535f7e33d8cb6944216d09299b2e49835e63836d77fff8a6b</span>
+          </td>
+          <td>03 Mar 2026, 09:54 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 7: 69fae3e -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="tag-chip commit-tag">69fae3e</span></td>
+          <td>
+            <span class="digest-short">sha256:14da318e</span><br>
+            <span class="digest-full">14da318e552c69d82b5b5cb396c1629633c09229ea9e5d81b80ecd29998dab2f</span>
+          </td>
+          <td>03 Mar 2026, 09:49 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>03 Mar 2026, 09:53 UTC</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 8: untagged sha256:939e8f -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:939e8fef</span><br>
+            <span class="digest-full">939e8fefd70056d4ebddee2fdbea68617da352dc81e255c76d1b90a2a4b22f58</span>
+          </td>
+          <td>03 Mar 2026, 09:47 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 9: 3b1c792 -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="tag-chip commit-tag">3b1c792</span></td>
+          <td>
+            <span class="digest-short">sha256:c307f03f</span><br>
+            <span class="digest-full">c307f03f47cbc3c8c96f7ccbf2a04094b0e8ebb0ac7c5ef868143a6106788ee7</span>
+          </td>
+          <td>03 Mar 2026, 09:31 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 10: untagged sha256:bcccd6 -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:bcccd66f</span><br>
+            <span class="digest-full">bcccd66f537958073cf272368291364632359d0b40204a2c9e28f46a8120e175</span>
+          </td>
+          <td>03 Mar 2026, 09:27 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 11: untagged sha256:2496d0 -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:2496d0b9</span><br>
+            <span class="digest-full">2496d0b94a844ede339a070fa309c6aa5acfcd1b35f066b3b030a9978eb4f742</span>
+          </td>
+          <td>03 Mar 2026, 09:09 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+        <!-- Image 12: untagged sha256:3dd648 (oldest) -->
+        <tr>
+          <td><input type="checkbox" /></td>
+          <td><span class="no-tag">— (untagged)</span></td>
+          <td>
+            <span class="digest-short">sha256:3dd64821</span><br>
+            <span class="digest-full">3dd648219006e793a384257185c1af66c3aaeaaf812f6ddb0984b408ea94c36d</span>
+          </td>
+          <td>03 Mar 2026, 09:07 UTC</td>
+          <td>
+            <div class="size-bar-wrap">
+              <span class="size-cell">83.6 MB</span>
+              <div class="size-bar" style="width:80px"></div>
+            </div>
+          </td>
+          <td><span class="badge-active"><span class="dot-green"></span> ACTIVE</span></td>
+          <td>—</td>
+          <td>
+            <div class="row-actions">
+              <button class="row-btn">Pull</button>
+              <button class="row-btn">Delete</button>
+            </div>
+          </td>
+        </tr>
+
+      </tbody>
+    </table>
+    <div class="pagination">
+      <span>Showing 1–12 of 12 images</span>
+      <div class="pg-btns">
+        <button class="pg-btn" disabled>‹ Previous</button>
+        <button class="pg-btn" disabled>Next ›</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Pull command hint -->
+  <div style="margin-top:20px;background:#fff;border:1px solid #d5dbdb;border-radius:2px;padding:16px 20px;">
+    <div style="font-weight:700;margin-bottom:10px;font-size:14px;">📋 Pull Commands</div>
+    <div style="background:#0f172a;border-radius:4px;padding:12px 16px;font-family:monospace;font-size:12px;color:#e2e8f0;line-height:1.8;">
+      <span style="color:#94a3b8"># Authenticate to ECR</span><br>
+      <span style="color:#fb923c">aws</span> ecr get-login-password --region us-east-1 | docker login --username AWS --password-stdin <span style="color:#34d399">958175316186.dkr.ecr.us-east-1.amazonaws.com</span><br><br>
+      <span style="color:#94a3b8"># Pull latest image</span><br>
+      <span style="color:#fb923c">docker</span> pull <span style="color:#34d399">958175316186.dkr.ecr.us-east-1.amazonaws.com/arulkumar-devops-app:latest</span><br><br>
+      <span style="color:#94a3b8"># Pull specific commit tag</span><br>
+      <span style="color:#fb923c">docker</span> pull <span style="color:#34d399">958175316186.dkr.ecr.us-east-1.amazonaws.com/arulkumar-devops-app:6426c4e</span>
+    </div>
+  </div>
+
+</div>
+</body>
+</html>
