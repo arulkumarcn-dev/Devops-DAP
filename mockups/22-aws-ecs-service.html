@@ -1,0 +1,264 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AWS ECS — arulkumar-devops-app-service</title>
+<style>
+  * { margin:0; padding:0; box-sizing:border-box; }
+  body { font-family: 'Amazon Ember', -apple-system, sans-serif; background:#f2f3f3; color:#16191f; font-size:14px; }
+  .aws-header { background:#232f3e; color:#fff; padding:0 24px; height:48px; display:flex; align-items:center; gap:16px; }
+  .aws-logo { font-size:22px; font-weight:800; color:#ff9900; letter-spacing:-1px; }
+  .aws-header nav { display:flex; gap:20px; margin-left:24px; }
+  .aws-header nav a { color:#d5dbdb; font-size:13px; cursor:pointer; }
+  .region { margin-left:auto; color:#d5dbdb; font-size:13px; display:flex; align-items:center; gap:6px; }
+  .account { color:#ff9900; font-size:13px; }
+  .breadcrumb { background:#fff; border-bottom:1px solid #d5dbdb; padding:8px 24px; font-size:13px; }
+  .breadcrumb a { color:#0073bb; }
+  .content { max-width:1200px; margin:0 auto; padding:24px; }
+  .page-title { font-size:20px; font-weight:700; margin-bottom:4px; display:flex; align-items:center; gap:10px; }
+  .page-sub { color:#687078; font-size:13px; margin-bottom:24px; }
+  .green-banner { background:#ebf8e8; border:1px solid #1d8102; border-radius:4px; padding:10px 16px; margin-bottom:20px; color:#1d8102; font-weight:600; display:flex; align-items:center; gap:8px; }
+  .cards { display:grid; grid-template-columns:repeat(4,1fr); gap:16px; margin-bottom:24px; }
+  .card { background:#fff; border:1px solid #d5dbdb; border-radius:4px; padding:16px; }
+  .card label { font-size:11px; color:#687078; display:block; margin-bottom:4px; text-transform:uppercase; font-weight:600; }
+  .card value { font-size:22px; font-weight:700; }
+  .card value.green { color:#1d8102; }
+  .card value.blue { color:#0073bb; }
+  .card .sub { font-size:12px; color:#687078; margin-top:4px; }
+  .tabs { display:flex; gap:0; border-bottom:1px solid #d5dbdb; margin-bottom:24px; background:#fff; }
+  .tab { padding:10px 20px; font-size:14px; cursor:pointer; border-bottom:3px solid transparent; color:#687078; }
+  .tab.active { color:#0073bb; border-bottom-color:#0073bb; font-weight:600; }
+  .section { background:#fff; border:1px solid #d5dbdb; border-radius:2px; margin-bottom:16px; }
+  .sec-header { padding:12px 20px; border-bottom:1px solid #d5dbdb; font-weight:700; font-size:14px; display:flex; justify-content:space-between; align-items:center; }
+  .sec-body { padding:20px; }
+  .detail-grid { display:grid; grid-template-columns:1fr 1fr 1fr; gap:16px; }
+  .detail-item label { font-size:12px; color:#687078; font-weight:600; display:block; margin-bottom:4px; text-transform:uppercase; }
+  .detail-item value { font-size:14px; color:#16191f; }
+  .detail-item .mono { font-family:monospace; font-size:12px; color:#0073bb; word-break:break-all; }
+  .badge { border-radius:12px; font-size:12px; padding:2px 10px; font-weight:600; }
+  .badge.active { background:#ebf8e8; color:#1d8102; border:1px solid #a0d7a0; }
+  .badge.completed { background:#ebf8e8; color:#1d8102; border:1px solid #a0d7a0; }
+  .badge.inprogress { background:#e3f2fd; color:#0073bb; border:1px solid #7ec8e3; }
+  table { width:100%; border-collapse:collapse; font-size:13px; }
+  th { background:#fafafa; padding:8px 20px; text-align:left; border-bottom:1px solid #d5dbdb; color:#687078; font-size:12px; font-weight:600; text-transform:uppercase; }
+  td { padding:10px 20px; border-bottom:1px solid #e9ebed; }
+  tr:last-child td { border-bottom:none; }
+  .running-dot { width:10px; height:10px; background:#1d8102; border-radius:50%; display:inline-block; margin-right:6px; }
+  .deploy-event { display:flex; gap:12px; align-items:flex-start; padding:10px 0; border-bottom:1px solid #f0f0f0; font-size:13px; }
+  .deploy-event:last-child { border-bottom:none; }
+  .event-time { color:#687078; font-size:12px; white-space:nowrap; min-width:130px; }
+  .event-msg { color:#16191f; }
+  .link { color:#0073bb; }
+  .btn-sm { background:#fff; color:#0073bb; border:1px solid #0073bb; border-radius:2px; padding:4px 10px; font-size:12px; cursor:pointer; }
+  .health-ok { color:#1d8102; font-weight:600; font-size:13px; }
+  .fargate-chip { background:#fff8e1; border:1px solid #f59e0b; border-radius:3px; padding:2px 8px; font-size:12px; color:#b45309; font-weight:600; }
+</style>
+</head>
+<body>
+<div class="aws-header">
+  <div class="aws-logo">aws</div>
+  <nav>
+    <a>Services ▾</a>
+    <a>Containers</a>
+    <a>Elastic Container Service</a>
+  </nav>
+  <div class="region">🌍 US East (N. Virginia) us-east-1 <span class="account">arulkumarcn-dev @ 9581-7531-6186</span></div>
+</div>
+
+<div class="breadcrumb">
+  <a>Amazon ECS</a> › <a>Clusters</a> › <a>arulkumar-devops-app-cluster</a> › <a>Services</a> › arulkumar-devops-app-service
+</div>
+
+<div class="content">
+  <div style="display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:16px">
+    <div>
+      <div class="page-title">
+        <span>arulkumar-devops-app-service</span>
+        <span class="badge active">ACTIVE</span>
+        <span class="fargate-chip">FARGATE</span>
+      </div>
+      <div class="page-sub">Cluster: arulkumar-devops-app-cluster | Created: 03 Mar 2026</div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <button class="btn-sm">Update service</button>
+      <button class="btn-sm">Delete</button>
+    </div>
+  </div>
+
+  <div class="green-banner">
+    ✅ Service has reached a steady state — 1 task running, deployment completed
+  </div>
+
+  <!-- Stats cards -->
+  <div class="cards">
+    <div class="card">
+      <label>Desired tasks</label>
+      <value class="blue">1</value>
+      <div class="sub">Configured count</div>
+    </div>
+    <div class="card">
+      <label>Running tasks</label>
+      <value class="green">1</value>
+      <div class="sub">✅ Healthy</div>
+    </div>
+    <div class="card">
+      <label>Pending tasks</label>
+      <value>0</value>
+      <div class="sub">No tasks starting</div>
+    </div>
+    <div class="card">
+      <label>Failed tasks</label>
+      <value>0</value>
+      <div class="sub">Last deployment</div>
+    </div>
+  </div>
+
+  <div class="tabs">
+    <div class="tab active">Configuration & networking</div>
+    <div class="tab">Tasks</div>
+    <div class="tab">Events</div>
+    <div class="tab">Deployments & rollouts</div>
+    <div class="tab">Load balancing</div>
+    <div class="tab">Logging</div>
+    <div class="tab">Tags</div>
+  </div>
+
+  <!-- Config section -->
+  <div class="section">
+    <div class="sec-header">Configuration</div>
+    <div class="sec-body">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>Service type</label>
+          <value>REPLICA</value>
+        </div>
+        <div class="detail-item">
+          <label>Launch type</label>
+          <value>FARGATE</value>
+        </div>
+        <div class="detail-item">
+          <label>Platform version</label>
+          <value>1.4.0 (LATEST)</value>
+        </div>
+        <div class="detail-item">
+          <label>Task definition</label>
+          <value class="mono link">arulkumar-devops-app-task:5</value>
+        </div>
+        <div class="detail-item">
+          <label>Deployment strategy</label>
+          <value>Rolling update</value>
+        </div>
+        <div class="detail-item">
+          <label>Health check grace</label>
+          <value>60 seconds</value>
+        </div>
+        <div class="detail-item" style="grid-column:1/-1">
+          <label>Service ARN</label>
+          <value class="mono">arn:aws:ecs:us-east-1:958175316186:service/arulkumar-devops-app-cluster/arulkumar-devops-app-service</value>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Networking -->
+  <div class="section">
+    <div class="sec-header">Networking</div>
+    <div class="sec-body">
+      <div class="detail-grid">
+        <div class="detail-item">
+          <label>VPC</label>
+          <value class="mono link">vpc-... (arulkumar-devops-vpc)</value>
+        </div>
+        <div class="detail-item">
+          <label>Subnets</label>
+          <value class="mono">subnet-0f0e478f... (us-east-1a)<br>subnet-07887a07... (us-east-1b)</value>
+        </div>
+        <div class="detail-item">
+          <label>Security group</label>
+          <value class="mono link">sg-062ce673b18b21db4</value>
+        </div>
+        <div class="detail-item">
+          <label>Public IP</label>
+          <value>ENABLED</value>
+        </div>
+        <div class="detail-item">
+          <label>Load balancer</label>
+          <value class="mono link">arulkumar-devops-app-alb</value>
+        </div>
+        <div class="detail-item">
+          <label>ALB DNS</label>
+          <value style="font-size:12px;color:#0073bb">arulkumar-devops-app-alb-481329356.us-east-1.elb.amazonaws.com</value>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Deployments -->
+  <div class="section">
+    <div class="sec-header">Deployments (latest 3)</div>
+    <table>
+      <tr>
+        <th>Deployment ID</th>
+        <th>Status</th>
+        <th>Task definition</th>
+        <th>Desired</th>
+        <th>Running</th>
+        <th>Created</th>
+      </tr>
+      <tr>
+        <td class="link">ecs-svc/7745301767820683733</td>
+        <td><span class="badge inprogress">IN PROGRESS</span></td>
+        <td class="link">arulkumar-devops-app-task:5</td>
+        <td>1</td>
+        <td>0 (pending: 1)</td>
+        <td>03 Mar 2026 11:13</td>
+      </tr>
+      <tr>
+        <td class="link">ecs-svc/9770151526350611152</td>
+        <td><span class="badge completed">COMPLETED</span></td>
+        <td class="link">arulkumar-devops-app-task:4</td>
+        <td>1</td>
+        <td>1</td>
+        <td>03 Mar 2026 11:02</td>
+      </tr>
+      <tr>
+        <td class="link">ecs-svc/8551158750819700088</td>
+        <td><span class="badge completed">COMPLETED</span></td>
+        <td class="link">arulkumar-devops-app-task:3</td>
+        <td>1</td>
+        <td>0</td>
+        <td>03 Mar 2026 10:48</td>
+      </tr>
+    </table>
+  </div>
+
+  <!-- Events -->
+  <div class="section">
+    <div class="sec-header">Recent events</div>
+    <div class="sec-body">
+      <div class="deploy-event">
+        <span class="event-time">11:14:18 UTC</span>
+        <span class="event-msg">(service arulkumar-devops-app-service) has started 1 tasks: (task <span class="link">936b9ece95c1...</span>)</span>
+      </div>
+      <div class="deploy-event">
+        <span class="event-time">11:02:37 UTC</span>
+        <span class="event-msg"><span class="running-dot"></span>(service arulkumar-devops-app-service) has reached a steady state. ✅</span>
+      </div>
+      <div class="deploy-event">
+        <span class="event-time">11:02:37 UTC</span>
+        <span class="event-msg">(service arulkumar-devops-app-service) (deployment ecs-svc/9770151526350611152) deployment completed.</span>
+      </div>
+      <div class="deploy-event">
+        <span class="event-time">11:02:15 UTC</span>
+        <span class="event-msg">(service arulkumar-devops-app-service) registered 1 targets in (target-group arulkumar-devops-app-tg/3edf52bc6d3b890e)</span>
+      </div>
+      <div class="deploy-event">
+        <span class="event-time">11:01:32 UTC</span>
+        <span class="event-msg">(service arulkumar-devops-app-service) has started 1 tasks: (task <span class="link">d6fb95fae391...</span>)</span>
+      </div>
+    </div>
+  </div>
+</div>
+</body>
+</html>
