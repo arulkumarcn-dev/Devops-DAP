@@ -62,9 +62,3 @@ cache:
   paths:
     - '/root/.m2/**/*'
     - 'target/**/*'
-
-reports:
-  junit-reports:
-    files:
-      - 'target/surefire-reports/*.xml'
-    file-format: 'JUNITXML'
