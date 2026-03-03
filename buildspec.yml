@@ -18,6 +18,8 @@ phases:
       - echo "========================================="
       - echo "Pre-Build Phase - ArulKumar"
       - echo "========================================="
+      - echo "Logging in to Docker Hub to avoid rate limits..."
+      - echo $DOCKER_PASSWORD | docker login --username $DOCKER_USERNAME --password-stdin
       - echo "Logging in to Amazon ECR..."
       - aws --version
       - REPOSITORY_URI=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_DEFAULT_REGION.amazonaws.com/$APP_NAME

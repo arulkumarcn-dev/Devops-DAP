@@ -478,6 +478,10 @@ Resources:
                   - logs:PutLogEvents
                   - s3:*
                   - ecr:*
+                  - ssm:GetParameters
+                  - ssm:GetParameter
+                  - ssm:GetParametersByPath
+                  - kms:Decrypt
                 Resource: '*'
 
   ECSTaskExecutionRole:
