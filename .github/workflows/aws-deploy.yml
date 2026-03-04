@@ -1,10 +1,12 @@
 name: Deploy to AWS ECS
 
 on:
-  push:
-    branches:
-      - main
   workflow_dispatch:
+  # Auto-deploy on push is disabled - AWS CodePipeline handles CI/CD automatically
+  # To re-enable: uncomment below and add AWS_ACCESS_KEY_ID + AWS_SECRET_ACCESS_KEY in GitHub Secrets
+  # push:
+  #   branches:
+  #     - main
 
 env:
   AWS_REGION: us-east-1
@@ -43,7 +45,6 @@ jobs:
 
     - name: Build with Maven
       run: |
-        cd src/main
         mvn clean package -DskipTests
 
     - name: Build, tag, and push image to Amazon ECR
@@ -52,7 +53,6 @@ jobs:
         ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
         IMAGE_TAG: ${{ github.sha }}
       run: |
-        cd src/main
         docker build -t $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG .
         docker tag $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG $ECR_REGISTRY/$ECR_REPOSITORY:latest
         docker push $ECR_REGISTRY/$ECR_REPOSITORY:$IMAGE_TAG
